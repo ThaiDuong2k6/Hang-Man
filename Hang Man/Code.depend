@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1741281567 source:d:\download\mingw\bin\code\main.cpp
+	<iostream>
+
+1741567265 source:d:\download\mingw\bin\hang man\main.cpp
+	<iostream>
+
