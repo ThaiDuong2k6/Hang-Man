@@ -67,11 +67,18 @@ string chooseWord()
     return WORD_LIST[randomIndex];
 }
 
-void renderGame(string guessedWord, int badGuessCount)
+void renderGame(string guessedWord, int badGuessCount, string &wrongGuesses)
 {
+    system("CLS");
     cout << FIGURE[badGuessCount] << endl;
     cout << guessedWord << endl;
     cout << "Number of wrong guesses: " << badGuessCount << endl;
+    cout << "Wrong guesses: ";
+    for (char c : wrongGuesses)
+    {
+        cout << c << " ";
+    }
+    cout << endl;
 }
 
 void update(string &guessedWord, const string &secretWord, char guess)
@@ -104,13 +111,14 @@ char readAGuess()
 
 int main()
 {
+    string wrongGuesses;
     string secretWord = chooseWord();
     string guessedWord = string(secretWord.length(), '-');
     int badGuessCount = 0;
 
     do
     {
-        renderGame(guessedWord, badGuessCount);
+        renderGame(guessedWord, badGuessCount, wrongGuesses);
             char guess = readAGuess();
             if (contains(secretWord, guess))
             {
@@ -119,11 +127,12 @@ int main()
             else
             {
                 badGuessCount++;
+                wrongGuesses.push_back(guess);
             }
     }
     while(badGuessCount < MAX_BAD_GUESSES && secretWord != guessedWord);
 
-    renderGame(guessedWord, badGuessCount);
+    renderGame(guessedWord, badGuessCount, wrongGuesses);
     if(badGuessCount < MAX_BAD_GUESSES)
     {
         cout << "Congratulations! You win!";
