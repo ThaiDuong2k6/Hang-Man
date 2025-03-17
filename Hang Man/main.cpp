@@ -1,73 +1,87 @@
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
-const string WORD_LIST[] = {"dog", "cat", "human"};
-const int WORD_COUNT = sizeof(WORD_LIST) / sizeof(string);
 const int MAX_BAD_GUESSES = 7;
 const string FIGURE[] = {
-"   -------------   \n"
-"   |               \n"
-"   |               \n"
-"   |               \n"
-"   |               \n"
-"   |    \n"
-" -----  \n",
-"   -------------   \n"
-"   |           |   \n"
-"   |               \n"
-"   |               \n"
-"   |               \n"
-"   |    \n"
-" -----  \n",
-"   -------------   \n"
-"   |           |   \n"
-"   |           O   \n"
-"   |               \n"
-"   |               \n"
-"   |    \n"
-" -----  \n",
-"   -------------   \n"
-"   |           |   \n"
-"   |           O   \n"
-"   |           |   \n"
-"   |               \n"
-"   |    \n"
-" -----  \n",
-"   -------------   \n"
-"   |           |   \n"
-"   |           O   \n"
-"   |          /|   \n"
-"   |               \n"
-"   |    \n"
-" -----  \n",
-"   -------------   \n"
-"   |           |   \n"
-"   |           O   \n"
-"   |          /|\  \n"
-"   |               \n"
-"   |    \n"
-" -----  \n",
-"   -------------   \n"
-"   |           |   \n"
-"   |           O   \n"
-"   |          /|\\ \n"
-"   |          /    \n"
-"   |    \n"
-" -----  \n",
-"   -------------   \n"
-"   |           |   \n"
-"   |           O   \n"
-"   |          /|\\ \n"
-"   |          / \\ \n"
-"   |    \n"
-" -----  \n"};
+    "   -------------   \n"
+    "   |               \n"
+    "   |               \n"
+    "   |               \n"
+    "   |               \n"
+    "   |    \n"
+    " -----  \n",
+    "   -------------   \n"
+    "   |           |   \n"
+    "   |               \n"
+    "   |               \n"
+    "   |               \n"
+    "   |    \n"
+    " -----  \n",
+    "   -------------   \n"
+    "   |           |   \n"
+    "   |           O   \n"
+    "   |               \n"
+    "   |               \n"
+    "   |    \n"
+    " -----  \n",
+    "   -------------   \n"
+    "   |           |   \n"
+    "   |           O   \n"
+    "   |           |   \n"
+    "   |               \n"
+    "   |    \n"
+    " -----  \n",
+    "   -------------   \n"
+    "   |           |   \n"
+    "   |           O   \n"
+    "   |          /|   \n"
+    "   |               \n"
+    "   |    \n"
+    " -----  \n",
+    "   -------------   \n"
+    "   |           |   \n"
+    "   |           O   \n"
+    "   |          /|\\ \n"
+    "   |               \n"
+    "   |    \n"
+    " -----  \n",
+    "   -------------   \n"
+    "   |           |   \n"
+    "   |           O   \n"
+    "   |          /|\\ \n"
+    "   |          /    \n"
+    "   |    \n"
+    " -----  \n",
+    "   -------------   \n"
+    "   |           |   \n"
+    "   |           O   \n"
+    "   |          /|\\ \n"
+    "   |          / \\ \n"
+    "   |    \n"
+    " -----  \n"};
 
-string chooseWord()
+vector<string> loadWordsFromFile(const string &filename)
 {
-    int randomIndex = rand() % WORD_COUNT;
+    vector<string> words;
+    ifstream file(filename);
+    string word;
+    while (file >> word)
+    {
+        words.push_back(word);
+    }
+    return words;
+}
+
+string chooseWord(const vector<string> &WORD_LIST)
+{
+    int randomIndex = rand() % WORD_LIST.size();
     return WORD_LIST[randomIndex];
 }
 
-void renderGame(string guessedWord, int badGuessCount, string &wrongGuesses)
+void renderGame(string guessedWord, int badGuessCount, const string &wrongGuesses)
 {
     system("CLS");
     cout << FIGURE[badGuessCount] << endl;
@@ -83,22 +97,18 @@ void renderGame(string guessedWord, int badGuessCount, string &wrongGuesses)
 
 void update(string &guessedWord, const string &secretWord, char guess)
 {
-    for(int i = secretWord.length() - 1; i >= 0; i--)
+    for (int i = 0; i < secretWord.length(); i++)
     {
-        if(secretWord[i] == guess)
+        if (secretWord[i] == guess)
         {
             guessedWord[i] = guess;
         }
     }
 }
 
-bool contains(string secretWord, char guess)
+bool contains(const string &secretWord, char guess)
 {
-    if (secretWord.find(guess) != string::npos)
-    {
-        return 1;
-    }
-    return 0;
+    return secretWord.find(guess) != string::npos;
 }
 
 char readAGuess()
@@ -111,34 +121,36 @@ char readAGuess()
 
 int main()
 {
+    srand(time(0));
+    vector<string> WORD_LIST = loadWordsFromFile("words.txt");
     string wrongGuesses;
-    string secretWord = chooseWord();
-    string guessedWord = string(secretWord.length(), '-');
+    string secretWord = chooseWord(WORD_LIST);
+    string guessedWord(secretWord.length(), '-');
     int badGuessCount = 0;
-
     do
     {
         renderGame(guessedWord, badGuessCount, wrongGuesses);
-            char guess = readAGuess();
-            if (contains(secretWord, guess))
-            {
-                update(guessedWord, secretWord, guess);
-            }
-            else
-            {
-                badGuessCount++;
-                wrongGuesses.push_back(guess);
-            }
+        char guess = readAGuess();
+        if (contains(secretWord, guess))
+        {
+            update(guessedWord, secretWord, guess);
+        }
+        else
+        {
+            badGuessCount++;
+            wrongGuesses.push_back(guess);
+        }
     }
-    while(badGuessCount < MAX_BAD_GUESSES && secretWord != guessedWord);
-
+    while (badGuessCount < MAX_BAD_GUESSES && secretWord != guessedWord);
     renderGame(guessedWord, badGuessCount, wrongGuesses);
-    if(badGuessCount < MAX_BAD_GUESSES)
+    if (badGuessCount < MAX_BAD_GUESSES)
     {
-        cout << "Congratulations! You win!";
+        cout << "Congratulations! You win!" << endl;
     }
     else
     {
-        cout << "You lost. The correct word is: " << secretWord;
+        cout << "You lost. The correct word is: " << secretWord << endl;
     }
+
+    return 0;
 }
