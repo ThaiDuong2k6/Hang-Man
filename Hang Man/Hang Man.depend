@@ -1,8 +1,0 @@
-# depslib dependency file v1.0
-1742187211 source:d:\download\mingw\bin\hang man\main.cpp
-	<iostream>
-	<fstream>
-	<vector>
-	<cstdlib>
-	<ctime>
-
