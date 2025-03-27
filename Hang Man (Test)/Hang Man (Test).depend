@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1742534441 source:d:\download\mingw\bin\hang man (test)\main.cpp
+	<iostream>
+	<fstream>
+	<vector>
+	<cstdlib>
+	<ctime>
+
+1742818926 source:d:\download\mingw\bin\hang man (test)\draw.cpp
+
+1742818437 source:d:\download\mingw\bin\hang man (test)\hangman.cpp
+	<iostream>
+	<fstream>
+	<vector>
+	<cstdlib>
+	<ctime>
+	"draw.h"
+
+1743084684 d:\download\mingw\bin\hang man (test)\draw.h
+	<iostream>
+	<thread>
+	<chrono>
+
