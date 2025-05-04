@@ -92,7 +92,16 @@ int main()
         char guess = getNextGuess(previousGuesses, secretWord);
         if(guess == 0)
         {
-            cout << "I give up, hang me :(" << endl;
+            cout << "I give up! What is your word? :3" << endl;
+            string newWord;
+            cin >> newWord;
+            ofstream file("words.txt", ios::app);
+            if(file.is_open())
+            {
+                file << endl << newWord;
+                file.close();
+                cout << "Your word has been updated to the file.";
+            }
             return 0;
         }
         do
