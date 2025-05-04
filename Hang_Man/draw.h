@@ -141,7 +141,8 @@ void render(int incorrectGuess, const set<char> &previousGuesses, const string &
 void displayFinalResult(bool isLosing, const string &secretWord)
 {
     clearScreen();
-    while (true)
+    auto start_time = chrono::steady_clock::now();
+    while (chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now() - start_time).count() < 10)
     {
         if (isLosing)
         {

@@ -59,7 +59,7 @@
 	"guesser.h"
 	"util.h"
 
-1746373544 d:\download\mingw\bin\hang_man\draw.h
+1746387586 d:\download\mingw\bin\hang_man\draw.h
 	<iostream>
 	<thread>
 	<chrono>
