@@ -9,19 +9,6 @@
 using namespace std;
 const int MAX_BAD_GUESSES = 8;
 
-vector<string> readWordListFromFile(const string& filePath)
-{
-    vector<string> wordList;
-    ifstream file(filePath);
-    string word;
-    while (getline(file, word))
-    {
-        wordList.push_back(word);
-    }
-    file.close();
-    return wordList;
-}
-
 int getUserWordLength()
 {
     int wordLength;
@@ -70,6 +57,23 @@ void update(char guess, const string &mask, int &incorrectGuess, set<char> &prev
             stop = true;
         }
     }
+}
+
+char getNextGuess(const set<char> &previousGuesses, const string& secretWord)
+{
+    static vector<string> wordList = readWordListFromFile("words.txt");
+    set<char> remainingChars = getRemainingChars(previousGuesses);
+    if(remainingChars.size() == 0)
+    {
+        return 0;
+    }
+    if(isAllDash(secretWord))
+    {
+        return getVowelGuess(remainingChars);
+    }
+    vector<string> filteredWordList = getSuitableWords(wordList, secretWord, remainingChars);
+    map<char, int> occurenceCount = getOccurenceCount(remainingChars, filteredWordList);
+    return getMaxOccurenceChar(remainingChars, occurenceCount);
 }
 
 int main()
